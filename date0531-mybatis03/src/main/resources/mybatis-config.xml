@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--引入属性文件-->
+    <properties resource="mysql.properties"></properties>
+
+    <settings>
+        <!--开启二级缓存-->
+        <setting name="cacheEnabled" value="true"/>
+    </settings>
+
+    <!--    给实体类起别名-->
+    <typeAliases>
+        <!-- <typeAlias type="com.yh.model.Customer" alias="Customer"/>-->
+        <!--将当前的包下的类名，都设置了别名，别名是：当前类的名字-->
+        <!--  <package name="com.yh.model"/>-->
+        <package name="com.yh.model"/>
+    </typeAliases>
+
+    <!--  环境配置  -->
+    <environments default="development">
+        <environment id="development">
+            <!--事务管理器JDBC-->
+            <transactionManager type="JDBC"/>
+            <!--连接池-->
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <!--记载映射文件-->
+    <mappers>
+        <!-- 加载指定的src目录下的映射文件-->
+        <!--<mapper resource="com/yh/mapper/CustomerMapper.xml"/>-->
+
+        <!-- 加载指定接口的全限定名-->
+        <!--<mapper class="com.yh.mapper.CustomerMapper"/>-->
+
+        <!--加载并扫描指定包下所有的接口-->
+        <!--<package name="com.yh.mapper"/>-->
+
+        <package name="com.yh.mapper"/>
+    </mappers>
+</configuration>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yh.mapper.one2one.PassengerMapper">
+
+    <resultMap id="passengerMap" type="passenger" autoMapping="true">
+        <!--column:数据库字段  property:实体类属性 autoMapping:自动映射,即column与property一致可以不写，
+        如果所有字段和属性名一致，只需保留主键id即可-->
+        <id column="id" property="id"/>
+        <!--<result column="name" property="name"/>
+        <result column="sex" property="sex"/>
+        <result column="birthday" property="birthday"/>-->
+
+        <!--javaType:指定关联对象的类型 property:指定关联对象的属性-->
+        <!--持有对象的一方，使用association对象属性-->
+        <association property="passport" javaType="passport" autoMapping="true">
+            <id column="tid" property="id"/>
+            <!--<result column="nationality" property="nationality"/>
+            <result column="expire" property="expire"/>-->
+        </association>
+    </resultMap>
+
+    <select id="findById" resultMap="passengerMap">
+        <!-- 根据乘客ID查询乘客及其护照信息 -->
+        <!-- 使用JOIN语句连接乘客表t_passenger和护照表t_passport，通过乘客ID进行关联 -->
+        <!-- WHERE子句用于筛选特定ID的乘客信息 -->
+        select t1.id,t1.name,t1.sex,t1.birthday,t2.id tid,t2.nationality,t2.expire
+        from t_passenger t1 join t_passport t2
+        on t1.id = t2.passenger_id
+        where t1.id = #{id}
+
+    </select>
+</mapper>

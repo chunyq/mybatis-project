@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yh.mapper.one2many.EmployeeMapper">
+    <resultMap id="employeeMap" type="employee" autoMapping="true">
+        <id column="id" property="id"/>
+        
+        <association property="department" javaType="department" autoMapping="true">
+            <id column="did" property="id"/>
+            <result column="dname" property="name"/>
+        </association>
+    </resultMap>
+
+
+    <select id="findById" resultMap="employeeMap">
+        select e.id,e.name,e.salary, d.id did,d.`NAME` dname,location
+        from t_employee e INNER JOIN t_department d
+        on e.dept_id=d.id
+        where e.id=#{id}
+    </select>
+</mapper>

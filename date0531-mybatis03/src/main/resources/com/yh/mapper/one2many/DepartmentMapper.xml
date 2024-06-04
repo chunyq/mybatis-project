@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yh.mapper.one2many.DepartmentMapper">
+
+    <!--    默认情况下，二级缓存机制是开启的。-->
+    <!--    只需要在对应的Mapper.xml文件中添加以下标签。用来表示”我"使用该二级缓存。-->
+    <cache/>
+
+
+    <resultMap id="deptMap" type="department" autoMapping="true">
+        <id column="did" property="id"/>
+        <result column="dname" property="name"/>
+
+
+        <collection property="employees" ofType="employee" autoMapping="true">
+            <id column="id" property="id"/>
+        </collection>
+    </resultMap>
+
+
+    <!--    select标签中的useCache="true"表示使用二级缓存。-->
+    <select id="getDeptById" resultMap="deptMap" useCache="true">
+        select d.id did,d.`NAME` dname,location,e.id,e.name,e.salary
+        from t_employee e INNER JOIN t_department d
+        on e.dept_id=d.id
+        where d.id=#{id}
+    </select>
+</mapper>

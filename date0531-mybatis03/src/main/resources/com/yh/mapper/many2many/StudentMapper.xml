@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yh.mapper.many2many.StudentMapper">
+    <resultMap id="stuMap" type="student" autoMapping="true">
+        <id property="id" column="sid"/>
+        <result property="name" column="sname"/>
+
+        <collection property="subjects" ofType="subject" autoMapping="true">
+            <id property="id" column="id"/>
+
+        </collection>
+    </resultMap>
+
+    <select id="findStudentById" resultMap="stuMap" parameterType="int">
+        SELECT sub.id, sub.`NAME`, grade, stu.id  sid, stu.`NAME` sname, sex
+        from t_student stu
+                 INNER JOIN t_stu_sub ss on stu.id = ss.student_id
+                 INNER JOIN t_subject sub on sub.id = ss.subject_id
+        where stu.id = #{id}
+
+    </select>
+</mapper>

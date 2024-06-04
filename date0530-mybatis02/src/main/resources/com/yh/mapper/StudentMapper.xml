@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yh.mapper.StudentMapper">
+
+    <resultMap id="studentMap" type="student">
+        <id column="stu_id" property="id"/>
+        <result column="stu_name" property="name"/>
+        <result column="stu_sex" property="sex"/>
+        <result column="stu_age" property="age"/>
+        <result column="stu_major" property="major"/>
+        <result column="stu_college" property="college"/>
+    </resultMap>
+
+
+    <!--    SQL片段提取-->
+    <sql id="basicSql">
+        SELECT stu_id,stu_name,stu_sex,stu_age,stu_major,stu_college FROM student1
+    </sql>
+
+    <sql id="basicWhere">
+        <if test="id != null">
+            stu_id = #{id}
+        </if>
+        <if test="name != null">
+            and stu_name = #{name}
+        </if>
+        <if test="sex != null">
+            and stu_sex = #{sex}
+        </if>
+        <if test="age != null">
+            and stu_age = #{age}
+        </if>
+        <if test="major != null">
+            and stu_major = #{major}
+        </if>
+        <if test="college != null">
+            and stu_college = #{college}
+        </if>
+    </sql>
+
+    <sql id="basicSet">
+        <if test="name != null">
+            stu_name = #{name},
+        </if>
+        <if test="sex != null">
+            stu_sex = #{sex},
+        </if>
+        <if test="age != null">
+            stu_age = #{age},
+        </if>
+        <if test="major != null">
+            stu_major = #{major},
+        </if>
+        <if test="college != null">
+            stu_college = #{college}
+        </if>
+    </sql>
+
+    <sql id="columAdd">
+        <trim suffixOverrides=",">
+            <if test="id != null">
+                stu_id,
+            </if>
+            <if test="name != null">
+                stu_name,
+            </if>
+            <if test="sex != null">
+                stu_sex,
+            </if>
+            <if test="age != null">
+                stu_age,
+            </if>
+            <if test="major != null">
+                stu_major,
+            </if>
+            <if test="college != null">
+                stu_college
+            </if>
+        </trim>
+    </sql>
+
+    <sql id="columValue">
+        <trim suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="sex != null">
+                #{sex},
+            </if>
+            <if test="age != null">
+                #{age},
+            </if>
+            <if test="major != null">
+                #{major},
+            </if>
+            <if test="college !=null">
+                #{college}
+            </if>
+        </trim>
+    </sql>
+
+    <!--    查询所有-->
+    <select id="findAll" resultType="student" resultMap="studentMap">
+        <include refid="basicSql"></include>
+    </select>
+
+    <!--    动态SQL if判断-->
+    <select id="findByStudents" resultType="student" resultMap="studentMap">
+        <include refid="basicSql"></include>
+        <!-- 在生成的SQL语句中添加WHERE子句前缀，并且忽略掉所有的AND前缀，然后包含"basicWhere"定义的条件 -->
+        <trim prefix="where" prefixOverrides="and">
+            <!-- 包含从"basicWhere"引用的SQL片段，用于构建WHERE条件 -->
+            <include refid="basicWhere"></include>
+        </trim>
+
+    </select>
+
+    <!--    动态SQL  set标签-->
+    <update id="updateStudents" parameterType="student">
+        update student1
+        <trim prefix="set" suffixOverrides=",">
+            <include refid="basicSet"></include>
+        </trim>
+        <trim prefix="where">
+            <if test="id != null">
+                stu_id = #{id}
+            </if>
+        </trim>
+
+
+    </update>
+
+
+    <!--
+        delete from user where id in( 1 )
+        delete from user where id in( 1 , 2 ,3 )
+        delete from user where id in( 1 , 2 ,3  ,5,7)
+        foreach标签相关属性
+            collection	代表要遍历的集合元素   数组array 集合list  ids emps
+            open      	代表语句的开始部分
+            close     	代表结束部分
+            item      	代表遍历集合的每个元素，生成的变量名
+            sperator  	代表分隔符
+       -->
+    <!--    动态SQL  delete-->
+    <delete id="deleteStudents" parameterType="long">
+        delete from student1 where stu_id in
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--    动态insert-->
+    <insert id="addStudent" parameterType="student">
+        <!-- 生成主键ID的注释开始 -->
+        <selectKey keyColumn="id" keyProperty="id" resultType="long" order="AFTER">
+            <!-- 执行SQL语句，获取最后一次插入操作产生的自增ID -->
+            select last_insert_id()
+        </selectKey>
+        <!-- 生成主键ID的注释结束 -->
+        insert into student1(<include refid="columAdd"></include>) values(<include refid="columValue"></include>)
+    </insert>
+</mapper>

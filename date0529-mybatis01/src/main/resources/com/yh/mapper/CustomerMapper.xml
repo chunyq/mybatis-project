@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--描述映射关系
+    0.映射的路径需要和接口的路径一致
+    1.namespace 必须和 接口的全限定完全一致
+    2.StatementId 必须和接口名一致
+    3.返回值需要一致:  如果返回值是集合只需要写泛型即可
+    4.参数类型必须一致(可选)
+    -->
+<mapper namespace="com.yh.mapper.CustomerMapper">
+    <!--
+        resultMap 手动建立字段映射关系
+            id="userResultMap"
+            type="com.itfxp.domain.User" 建立映射的java类型
+        id 标签 主键
+            column="uid" 列名
+            property="id" 实体属性名
+       result 标签 普通字段
+            column="name" 列名
+            property="username" 实体属性名
+    -->
+    <resultMap id="userResultMap" type="Customer">
+        <id column="编号" property="id"/>
+        <result column="姓名" property="name"/>
+        <result column="性别" property="gender"/>
+        <result column="年龄" property="age"/>
+        <result column="地址" property="address"/>
+        <result column="qq号" property="qq"/>
+        <result column="邮箱" property="email"/>
+        <result column="状态" property="status"/>
+    </resultMap>
+
+    <!--    当查询时给字段起别名，而且别名和实体属性名不一样，那么就需要使用resultMap映射，要不然查询结果为空-->
+    <select id="findAllCustomers" resultMap="userResultMap">
+        select id as 编号,name as 姓名,gender as 性别,age as 年龄,address as 地址,qq as qq号,email as 邮箱,status as 状态 from customer
+    </select>
+
+    <!--
+    select:查询
+        id: StatementId 语句id
+        resultType:返回值类型 : 如果返回值是集合只需要写泛型即可
+    -->
+    <select id="findAll" resultType="Customer">
+        select * from customer
+    </select>
+
+    <!--    #{id}动态id  #{}表示占位符  相当于?，表明使用的是预编译语句对象PreparedStatement-->
+    <select id="findById" resultType="Customer" parameterType="Integer">
+        select * from customer where id = #{id}
+    </select>
+
+    <delete id="deleteById" parameterType="int">
+        delete from customer where id = #{id}
+    </delete>
+
+    <insert id="addCustomer" parameterType="Customer">
+        <!-- 生成主键ID的注释开始 -->
+        <selectKey keyColumn="id" keyProperty="id" resultType="int" order="AFTER">
+            <!-- 执行SQL语句，获取最后一次插入操作产生的自增ID -->
+            select last_insert_id()
+        </selectKey>
+        <!-- 生成主键ID的注释结束 -->
+        insert into customer
+        values(#{id},#{name},#{gender},#{age},#{address},#{qq},#{email},#{status})
+    </insert>
+
+    <update id="updateCustomer" parameterType="Customer">
+        update customer set
+        name = #{name},gender = #{gender},age = #{age},address = #{address},qq = #{qq},email = #{email},status =
+        #{status} where id = #{id}
+    </update>
+
+    <!--    模糊查询-->
+    <select id="findByNameLike" resultType="Customer" parameterType="String">
+        select * from customer where name like concat('%',#{name},'%')
+    </select>
+
+    <!--    分页查询开始-->
+    <select id="findAllLimit" resultType="Customer">
+        select * from customer limit #{start},#{rows}
+    </select>
+    <!--    分页查询结束-->
+
+    <!--    查询总记录数-->
+    <select id="findTotal" resultType="int">
+        select count(*) from customer
+    </select>
+
+
+    <!--    动态SQL if标签开始-->
+    <select id="findByIdAndNameIf" resultType="Customer">
+        select * from customer
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+            <if test="name != null">
+                and name = #{name}
+            </if>
+        </where>
+    </select>
+    <!--    动态SQL结束-->
+
+
+</mapper>

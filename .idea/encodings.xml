@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://D:/maven-repository/org/springframework/boot/spring-boot-starter-parent/2.7.3/src/main/resources" charset="UTF-8" />
+    <file url="file://E:/黑马Java项目-苍穹外卖/sky-take-out/sky-common/src/main/java" charset="UTF-8" />
+    <file url="file://E:/黑马Java项目-苍穹外卖/sky-take-out/sky-pojo/src/main/java" charset="UTF-8" />
+    <file url="file://E:/黑马Java项目-苍穹外卖/sky-take-out/sky-server/src/main/java" charset="UTF-8" />
+    <file url="file://E:/黑马Java项目-苍穹外卖/sky-take-out/src/main/java" charset="UTF-8" />
+    <file url="file://E:/黑马Java项目-苍穹外卖/sky-take-out/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/date0529-mybatis01/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/date0529-mybatis01/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/date0530-mybatis02/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/date0530-mybatis02/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/date0531-mybatis03/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/date0531-mybatis03/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/date0603-mybatis04/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/date0603-mybatis04/src/main/resources" charset="UTF-8" />
+  </component>
+</project>
